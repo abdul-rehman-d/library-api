@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,11 +24,35 @@ func getBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, books)
 }
 
+func createBook(c *gin.Context) {
+	var newBook book
+
+	if err := c.BindJSON(&newBook); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid data provided.",
+		})
+		return
+	}
+
+	index, err := strconv.ParseInt(books[len(books)-1].ID, 10, 0)
+
+	if err != nil {
+		index = int64(len(books))
+	}
+
+	newBook.ID = strconv.FormatInt(index+1, 10)
+
+	books = append(books, newBook)
+
+	c.IndentedJSON(http.StatusCreated, newBook)
+}
+
 func main() {
 	r := gin.Default()
 
 	// routes
 	r.GET("/books", getBooks)
+	r.POST("/books", createBook)
 
 	r.Run("localhost:8000")
 }
