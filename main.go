@@ -1,22 +1,14 @@
 package main
 
 import (
-	"github.com/abdul-rehman-d/go-first-api/controllers"
 	"github.com/abdul-rehman-d/go-first-api/db"
-	"github.com/gin-gonic/gin"
+	"github.com/abdul-rehman-d/go-first-api/router"
 )
 
 func main() {
 	db.InitializeDB()
 
-	r := gin.Default()
+	router := router.Initialize()
 
-	// routes
-	r.GET("/books", controllers.GetBooks)
-	r.POST("/books", controllers.CreateBook)
-	// r.GET("/books/:bookId", getBookByID)
-
-	// r.PATCH("/books/checkout", checkoutBook)
-
-	r.Run("localhost:8000")
+	router.Run("localhost:8000")
 }
