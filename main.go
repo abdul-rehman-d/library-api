@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -18,6 +19,31 @@ var books = []book{
 	{ID: "1", Title: "Golang pointers", Author: "Mr. Golang", Quantity: 10},
 	{ID: "2", Title: "Goroutines", Author: "Mr. Goroutine", Quantity: 20},
 	{ID: "3", Title: "Golang routers", Author: "Mr. Router", Quantity: 30},
+}
+
+func findBook(id string) (*book, error) {
+	for _, b := range books {
+		if b.ID == id {
+			return &b, nil
+		}
+	}
+
+	return nil, errors.New("book not found")
+}
+
+func getBookByID(c *gin.Context) {
+	id := c.Param("bookId")
+
+	b, err := findBook(id)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, b)
 }
 
 func getBooks(c *gin.Context) {
@@ -53,6 +79,7 @@ func main() {
 	// routes
 	r.GET("/books", getBooks)
 	r.POST("/books", createBook)
+	r.GET("/books/:bookId", getBookByID)
 
 	r.Run("localhost:8000")
 }
