@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/abdul-rehman-d/go-first-api/db"
-	"github.com/abdul-rehman-d/go-first-api/models"
+	"github.com/abdul-rehman-d/library-api/db"
+	"github.com/abdul-rehman-d/library-api/models"
 	"github.com/gin-gonic/gin"
 )
 

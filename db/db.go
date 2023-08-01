@@ -1,7 +1,7 @@
 package db
 
 import (
-	"github.com/abdul-rehman-d/go-first-api/models"
+	"github.com/abdul-rehman-d/library-api/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )

@@ -1,4 +1,4 @@
-module github.com/abdul-rehman-d/go-first-api
+module github.com/abdul-rehman-d/library-api
 
 go 1.20
 

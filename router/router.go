@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/abdul-rehman-d/go-first-api/controllers"
+	"github.com/abdul-rehman-d/library-api/controllers"
 	"github.com/gin-gonic/gin"
 )
 

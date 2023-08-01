@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/abdul-rehman-d/go-first-api/db"
-	"github.com/abdul-rehman-d/go-first-api/router"
+	"github.com/abdul-rehman-d/library-api/db"
+	"github.com/abdul-rehman-d/library-api/router"
 )
 
 func main() {
