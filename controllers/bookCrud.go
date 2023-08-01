@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -44,30 +45,34 @@ func CreateBook(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newBook)
 }
 
-func GetBookByID(c *gin.Context) {
-	id := c.Param("bookId")
-
+func FindBookByID(id string) (*models.Book, error) {
 	parsedID, err := strconv.ParseUint(id, 10, 0)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"message": "Invalid ID: ID must be an integer.",
-		})
-		return
+		return nil, errors.New("invalid id: id must be an integer")
 	}
 
 	book := models.Book{}
 	result := db.DB.Find(&book, uint(parsedID))
 
 	if result.Error != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"message": "Something went wrong.",
-		})
-		return
+		return nil, errors.New("something went wrong")
 	}
 
 	if book.ID == 0 {
+		return nil, errors.New("book not found")
+	}
+
+	return &book, nil
+}
+
+func GetBookByID(c *gin.Context) {
+	id := c.Param("bookId")
+
+	book, err := FindBookByID(id)
+
+	if err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
-			"message": "Book Not Found.",
+			"message": err.Error(),
 		})
 		return
 	}
