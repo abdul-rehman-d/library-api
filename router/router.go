@@ -11,7 +11,7 @@ func Initialize() *gin.Engine {
 	// routes
 	router.GET("/books", controllers.GetBooks)
 	router.POST("/books", controllers.CreateBook)
-	// r.GET("/books/:bookId", getBookByID)
+	router.GET("/books/:bookId", controllers.GetBookByID)
 
 	// r.PATCH("/books/checkout", checkoutBook)
 
