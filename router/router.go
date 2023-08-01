@@ -13,7 +13,7 @@ func Initialize() *gin.Engine {
 	router.POST("/books", controllers.CreateBook)
 	router.GET("/books/:bookId", controllers.GetBookByID)
 
-	// r.PATCH("/books/checkout", checkoutBook)
+	router.PATCH("/checkout", controllers.CheckoutBook)
 
 	return router
 }
