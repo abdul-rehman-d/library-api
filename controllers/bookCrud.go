@@ -7,6 +7,7 @@ import (
 
 	"github.com/abdul-rehman-d/library-api/db"
 	"github.com/abdul-rehman-d/library-api/models"
+	"github.com/abdul-rehman-d/library-api/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,6 +31,13 @@ func CreateBook(c *gin.Context) {
 	if err := c.BindJSON(&bookFromJson); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid data provided.",
+		})
+		return
+	}
+
+	if err := utils.ValidateNewBook(bookFromJson); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
 		})
 		return
 	}
