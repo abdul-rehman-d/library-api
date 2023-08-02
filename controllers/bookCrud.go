@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/abdul-rehman-d/library-api/db"
@@ -101,7 +102,7 @@ func DeleteAll(c *gin.Context) {
 		return
 	}
 
-	if password.Password != "super-secret-password" {
+	if password.Password != os.Getenv("LIBRARY_API_PURGE_PASSWORD") {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid password",
 		})
