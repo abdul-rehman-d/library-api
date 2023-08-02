@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -86,4 +87,37 @@ func GetBookByID(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, book)
+}
+
+func DeleteAll(c *gin.Context) {
+	var password struct {
+		Password string `json:"password"`
+	}
+
+	if err := c.BindJSON(&password); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"message": "Must have 'password' key in payload",
+		})
+		return
+	}
+
+	if password.Password != "super-secret-password" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid password",
+		})
+		return
+	}
+
+	result := db.DB.Delete(&models.Book{}, "Title Like ?", "%%")
+
+	if result.Error != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"message": "Something went wrong",
+		})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, gin.H{
+		"message": fmt.Sprintf("%d records deleted", result.RowsAffected),
+	})
 }
