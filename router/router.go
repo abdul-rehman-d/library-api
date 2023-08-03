@@ -2,11 +2,14 @@ package router
 
 import (
 	"github.com/abdul-rehman-d/library-api/controllers"
+	"github.com/abdul-rehman-d/library-api/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func Initialize() *gin.Engine {
 	router := gin.Default()
+
+	router.Use(middleware.GetCustomCors())
 
 	// routes
 	router.GET("/books", controllers.GetBooks)
