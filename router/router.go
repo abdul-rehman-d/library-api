@@ -16,6 +16,7 @@ func Initialize() *gin.Engine {
 	router.POST("/purge", controllers.DeleteAll)
 
 	router.PATCH("/checkout", controllers.CheckoutBook)
+	router.PATCH("/checkin", controllers.CheckinBook)
 
 	return router
 }

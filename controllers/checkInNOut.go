@@ -44,3 +44,34 @@ func CheckoutBook(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusAccepted, book)
 }
+
+func CheckinBook(c *gin.Context) {
+	id, exists := c.GetQuery("book_id")
+
+	if !exists {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"message": "Parameter 'book_id' is required.",
+		})
+		return
+	}
+
+	book, err := FindBookByID(id)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	result := db.DB.Model(&book).Update("Quantity", book.Quantity+1)
+
+	if result.Error != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+			"message": "something went wrong",
+		})
+		return
+	}
+
+	c.IndentedJSON(http.StatusAccepted, book)
+}
